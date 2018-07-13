@@ -12,20 +12,17 @@
         <h1 id="linux-tricks">Linux Tricks</h1>
 <h3 id="merge-pdf">Merge PDF</h3>
 <p><strong>Requirement</strong>: <code>ghostscript</code></p>
-<div class="codehilite"><pre><span></span>gs -dNOPAUSE -sDEVICE<span class="o">=</span>pdfwrite -sOUTPUTFILE<span class="o">=</span>output.pdf -dBATCH first.pdf second.pdf
-</pre></div>
+<pre class="codehilite"><code class="language-bash">gs -dNOPAUSE -sDEVICE=pdfwrite -sOUTPUTFILE=output.pdf -dBATCH first.pdf second.pdf</code></pre>
 
 
 <h3 id="parse-json">Parse JSON</h3>
 <p><strong>Requirement</strong>: <code>jq</code></p>
-<div class="codehilite"><pre><span></span>curl -s https://v1.hitokoto.cn/ <span class="p">|</span> jq <span class="s1">&#39;.hitokoto&#39;</span>
-</pre></div>
+<pre class="codehilite"><code class="language-bash">curl -s https://v1.hitokoto.cn/ | jq '.hitokoto'</code></pre>
 
 
 <h3 id="clipboard">Clipboard</h3>
 <p><strong>Requirement</strong>: <code>xclip</code></p>
-<div class="codehilite"><pre><span></span><span class="nb">pwd</span> <span class="p">|</span> xclip -selection <span class="s1">&#39;clipboard&#39;</span> <span class="c1"># copy current path</span>
-</pre></div>
+<pre class="codehilite"><code class="language-bash">pwd | xclip -selection 'clipboard' # copy current path</code></pre>
         <a id="url" href="https://tunkshif.github.io/">- INDEX -</a>
     </div>
     <div id="footer">
