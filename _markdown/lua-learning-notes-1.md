@@ -1,8 +1,6 @@
 TITLE: Lua Learning Notes - 1
 TAG: lua
-
 Lua Learning Notes - 1
-
 ==================
 
 [TOC]
