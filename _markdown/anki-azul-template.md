@@ -13,4 +13,4 @@ Anki Azul Template
 
 [1]: https://apps.ankiweb.net/index.html
 [2]: https://github.com/TunkShif/Anki-Azul-Template
-[3]: https://i.loli.net/2018/07/17/5b4dea793fcae.png
+[3]: https://raw.githubusercontent.com/TunkShif/Anki-Azul-Template/master/img/screenshot_1531831838.png
