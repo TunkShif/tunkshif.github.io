@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>桌面环境微科普与 i3 配置记录</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="/static/css/tango.css" />
+</head>
+<body>
+    <div id=container>
+        <h1 id="i3">桌面环境微科普与 i3 配置记录</h1>
+<div class="toc">
+<ul>
+<li><a href="#i3">桌面环境微科普与 i3 配置记录</a><ul>
+<li><a href="#_1">简介</a><ul>
+<li><a href="#_2">桌面环境</a></li>
+<li><a href="#_3">窗口管理器</a></li>
+<li><a href="#_4">显示管理器</a></li>
+</ul>
+</li>
+<li><a href="#i3_1">i3</a><ul>
+<li><a href="#_5">安装</a></li>
+<li><a href="#_6">基本操作</a></li>
+<li><a href="#_7">配置</a><ul>
+<li><a href="#_8">设置开机自启的应用程序</a></li>
+<li><a href="#_9">设置壁纸</a></li>
+<li><a href="#_10">窗口特效</a></li>
+<li><a href="#_11">通知提醒</a></li>
+<li><a href="#_12">应用启动器</a></li>
+<li><a href="#_13">自定义按键绑定</a></li>
+<li><a href="#_14">配置工作区</a></li>
+<li><a href="#_15">自动归类</a></li>
+<li><a href="#_16">界面样式</a></li>
+<li><a href="#_17">关机注销</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<h3 id="_1">简介</h3>
+<h4 id="_2">桌面环境</h4>
+<p>即 <strong>DE</strong>(<em>Desktop Environment</em>), 诸如<code>gnome kde xfce mate lxde cinnamon budgie dde</code>之类的皆为完整的桌面环境,
+一般完整的桌面环境都会提供<em>窗口管理器</em>, <em>面板(任务栏)</em>, <em>配套应用程序(如文件管理器, 终端模拟器, 文本编辑器等)</em>,
+完整的桌面环境一般能够提供一个开箱即用的桌面环境, 对普通用户比较友好.</p>
+<h4 id="_3">窗口管理器</h4>
+<p>即 <strong>WM</strong>(<em>Window Manager</em>), 提供窗口边框, 标题栏等的图形界面, 有些窗口管理器还有更多的功能,
+不同的桌面环境采用不同的窗口管理器, 比如 <em>gnome3</em> 的 <em>Mutter</em>, <em>gnome2</em> 的 <em>Metacity</em>, <em>xfce</em> 的 <em>xfwm,
+</em>cinnamon 的窗口管理器 <em>Muffin</em> 则是 fork 自 <em>Mutter</em>, <em>mate</em> 的 <em>Marco</em> 则是 fork 自 <em>Metacity</em>.
+还有一些不被包含在桌面环境内的可供独立使用的窗口管理器, 比如 <em>Openbox</em>, <em>Fluxbox</em> 等.</p>
+<p>窗口管理器又分为三类, <strong>堆栈/悬浮式</strong>(<em>Stacking</em>), <strong>平铺/瓦片式</strong>(<em>Tiling</em>), <strong>动态式</strong>(<em>Dynamic</em>),
+上面提到的窗口管理器全部为传统的堆栈式, 即一个个窗口可以堆叠在一起, 而平铺式则是将一个个窗口互不重合的全部展示在屏幕上.
+比如 <em>i3wm</em>, <em>herbstluftwm</em>, <em>awesome</em> 等都属于平铺式的窗口管理器.</p>
+<p>此外, 在 Windows Vista 和 Windows 7 中, 你可以在任务管理器里面发现一个叫 <em>dwm.exe</em> 的进程, 这便是 Windows 的窗口管理器,
+Aero 特效等都依靠此实现.</p>
+<h4 id="_4">显示管理器</h4>
+<p>即 <strong>DM</strong>(<em>Display Manager</em>), 又叫登陆管理器, 提供了在电脑开机启动后, 在进入桌面环境前的用户登陆界面,
+有些桌面环境也会附带有显示管理器, 比如 <em>gnome</em> 的 <em>GDM</em>, <em>kde</em> 的 <em>SDDM</em>, <em>lxde</em> 的 <em>lxdm</em>,
+还有我个人喜欢的 <em>lightdm</em>, lightdm 又需要安装不同的 <em>greeter</em>, 比如基于 gtk 的 <em>lightdm-gtk-greeter</em>,
+适用于 kde4 的 <em>lightdm-kde-greeter</em>, ubuntu unity 环境下的 <em>lightdm-unity-greeter</em>, eos 的 <em>lightdm-pantheon-greeter</em>,
+以及 deepin 的 <em>deepin-session-ui</em> (~~包名不规范差评~~)</p>
+<p>好了前面讲了这么多, 现在如果你不满足大型桌面环境的臃肿, ~~或者和我一样因配置太差~~, 那么可以尝试仅使用窗口管理器,
+不过纯窗口管理器门槛比较高, 因为大多都需要手动编辑配置文件, 但配置好了以后可谓是一劳永逸
+如果还想要体验纯键盘操作桌面, 那么可以试试平铺窗口管理器.
+下面即为在 <strong>ArchLinux</strong> 下安装配置 <strong>i3wm</strong> 的记录</p>
+<h3 id="i3_1">i3</h3>
+<h4 id="_5">安装</h4>
+<p>使用 pacman 直接安装 i3 应用组即可</p>
+<div class="codehilite"><pre><span></span>sudo pacman -S i3
+</pre></div>
+
+
+<p><img alt="i3-group" src="https://i.loli.net/2018/08/02/5b6279bccfedf.png" /></p>
+<p>注意 i3 组中包含了 i3-wm 和 i3-gaps 两个互相冲突的包, i3-gaps 是 fork 自 i3-wm 的项目, 提供了窗口间距的设置,
+推荐安装 i3-gaps 即可, 默认也是安装的 i3-gaps</p>
+<div class="codehilite"><pre><span></span>sudo pacman -S lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings
+sudo systemctl <span class="nb">enable</span> lightdm
+
+sudo pacman -S network-manager-applet
+sudo systemctl <span class="nb">enable</span> NetworkManager
+</pre></div>
+
+
+<p>接下来安装显示管理器, 这里安装的是 lightdm 和 gtk-greeter, lightdm-gtk-greeter-settings 包提供了一个图形界面的配置工具
+然后开启显示管理器服务, 除此之外对于使用无线网络的用户安装 networkmanager 提供 wifi 管理的托盘程序, 开启服务
+重启后就会看到进入了显示管理器, 第一次登陆进入 i3wm 会有一个简单的配置向导,
+会提示设置 mod 键， 这是一个很重要的按键, 对窗口的操作等都需要用到这个键, 设置为 meta 键(即 windows 徽标键)个人觉得比较方便使用.</p>
+<p>接下来再安装一些常用应用, 方便后面的编辑配置文件</p>
+<div class="codehilite"><pre><span></span>sudo pacman -S thunar xfce4-terminal mousepad <span class="c1"># xfce 下的文件管理器, 终端模拟器和文本编辑器</span>
+sudo pacman -S nano vim <span class="c1"># 终端下的文本编辑器, nano和vim</span>
+</pre></div>
+
+
+<h4 id="_6">基本操作</h4>
+<p>现在按下 <code>mod+回车</code> , 如果按照上面设置的话, 也就是 Win+回车 组合键, 会打开安装的终端模拟器, 接下来再熟悉以下基本操作</p>
+<p><img alt="main" src="https://i.loli.net/2018/08/02/5b6280c8aef4b.png" /></p>
+<p>如上图打开了三个终端窗口, 可以看到平铺式窗口管理器的特点了, 如果你要问为什么自己的界面为什么那么复古, 那是因为没有完全配置好,
+先别急着搞配置文件, 首先用熟练后再美化也不迟.</p>
+<p>用 <code>mod+上下左右方向键</code> 来移动焦点选择窗口, 用 <code>mod+Shift+上下左右方向键</code> 来交换移动窗口的位置, 可以实现更改窗口铺放的布局</p>
+<p><img alt="layout-1" src="https://i.loli.net/2018/08/02/5b62822778bdd.png" />
+<img alt="layout-2" src="https://i.loli.net/2018/08/02/5b62826e68239.png" />
+<img alt="layout-3" src="https://i.loli.net/2018/08/02/5b628298c796a.png" /></p>
+<p>用 <code>mod+h</code> 和 <code>mod+v</code> 可以横向纵向地分割窗口
+用 <code>mod+w</code> 开启 tab 模式, 这样几个窗口可以合并到一个窗口, 并且以 tab 栏的模式切换</p>
+<p><img alt="layout-4" src="https://i.loli.net/2018/08/02/5b62834171665.png" /></p>
+<p>用 <code>mod+f</code> 开启全屏模式</p>
+<p><img alt="layout-5" src="https://i.loli.net/2018/08/02/5b628379599b9.png" /></p>
+<p>用 <code>mod+Shift+空格</code> 将某一个窗口设置为悬浮模式, 也就是传统的堆栈式, 可以用鼠标拖动</p>
+<p><img alt="layout-6" src="https://i.loli.net/2018/08/02/5b6283cba881d.png" /></p>
+<p>用 <code>mod+r</code> 进入调整窗口模式, 然后按动方向键即可调整窗口大小</p>
+<p><img alt="layout-7" src="https://i.loli.net/2018/08/02/5b62b6856a991.png" /></p>
+<p>用 <code>mod+Shift+q</code> 来关闭窗口</p>
+<p>下面引入工作区的概念, 平铺式的窗口管理器由于打开的窗口会全部铺开在屏幕上面, 所以同时开很多个窗口不太现实,
+因此引入了工作区的概念, 其实工作区在堆栈式的窗口管理器内也有, 最多可设定10个工作区,
+用 <code>mod+数字键</code> 即可进入对应号码的工作区, 如图中状态栏左上角显示的3个标签, 图中是经过配置过后的效果
+默认的话 i3bar 是在下方, 所以工作区显示在左下角</p>
+<p><img alt="layout-8" src="https://i.loli.net/2018/08/02/5b62b70618b7b.png" /></p>
+<p>用 <code>mod+Shift+数字键</code> 即可将选中的窗口移动到指定工作区</p>
+<h4 id="_7">配置</h4>
+<p>熟练基本操作以后, 可以对 i3wm 进行配置, 使其更加有效率和更加美观
+第一次打开 i3wm 时配置向导生成的配置文件位于 <code>~/.config/i3/config</code>, 后文为方便称为 <code>i3 配置文件</code>
+用文本编辑器打开该配置文件, 进行一系列的自定义</p>
+<p>每一次改完配置后, 可以用 <code>mod+Shift+c</code> 来重新读取配置文件, 用 <code>mod+Shift+r</code> 重启 i3wm
+当然自启动和壁纸这类配置可能需要重启或注销后才能生效</p>
+<h5 id="_8">设置开机自启的应用程序</h5>
+<p>推荐建立 <code>~/.config/i3/autostart</code> 文件, 里面写上需要开机自启的程序, 或者需要执行的脚本, 下面是个人的配置供参考</p>
+<div class="codehilite"><pre><span></span><span class="ch">#!/bin/sh</span>
+
+<span class="c1"># 触摸板设置  </span>
+xinput set-prop <span class="m">13</span> <span class="m">270</span> <span class="m">1</span>
+xinput set-prop <span class="m">13</span> <span class="m">283</span> <span class="m">0</span>, <span class="m">1</span>, <span class="m">0</span>
+
+<span class="c1"># 启用网络管理的托盘程序</span>
+nm-applet <span class="p">&amp;</span>
+
+<span class="c1"># 开启compton, 一个合成管理器, 用以提供窗口的透明, 动画特效等, 下面会介绍</span>
+compton <span class="p">&amp;</span>
+
+<span class="c1"># 开启输入法</span>
+fcitx <span class="p">&amp;</span>
+</pre></div>
+
+
+<p>然后在 i3 配置文件中写入</p>
+<div class="codehilite"><pre><span></span><span class="nb">exec</span> --no-startup-id sh ~/.config/i3/autostart
+</pre></div>
+
+
+<h5 id="_9">设置壁纸</h5>
+<p>通常用 feh 来设置壁纸, feh 还可以作为图片浏览器, 直接用 pacman 安装即可
+当然也可以用 nitrogen 来设置壁纸, 个人没有用过所以不作介绍
+首先在终端内执行</p>
+<div class="codehilite"><pre><span></span>feh --bg-scale /path/to/your/wallpaper.png
+</pre></div>
+
+
+<p>然后会生成一个 <code>~/.fehbg</code> 文件, 接着在 i3 配置文件中写入</p>
+<div class="codehilite"><pre><span></span><span class="nb">exec</span> --no-startup-id sh ~/.fehbg
+</pre></div>
+
+
+<p>当然也可以直接在配置文件中写入</p>
+<div class="codehilite"><pre><span></span><span class="nb">exec</span> --no-startup-id feh --bg-scale /path/to/your/wallpaper.png
+</pre></div>
+
+
+<h5 id="_10">窗口特效</h5>
+<p>i3wm 并不原生支持窗口合成功能, 也就意味着窗口透明无法实现, 可以安装 compton 包, 为 i3wm 添加窗口透明和动画特效支持,
+安装后加入自启动即可, 参考上文</p>
+<h5 id="_11">通知提醒</h5>
+<p>推荐使用 dunst, 用 pacman 安装即可, 配置文件可参照官网文档写, ~~或者照着别人的抄~~
+效果如下</p>
+<p><img alt="dunst" src="https://i.loli.net/2018/08/02/5b62bb522eeba.png" /></p>
+<h5 id="_12">应用启动器</h5>
+<p>我开始用的是 dmenu, 这也是 i3wm 默认的启动器, 安装后直接用 <code>mod+d</code> 呼出,
+不过后面我换用 rofi 了, 效果如图</p>
+<p><img alt="rofi" src="https://i.loli.net/2018/08/02/5b62bc7d3cea4.png" /></p>
+<p>在 i3 配置文件中删除原来的按键绑定, 加入以下即可</p>
+<div class="codehilite"><pre><span></span>bindsym <span class="nv">$mod</span>+d <span class="nb">exec</span> --no-startup-id rofi -show drun
+</pre></div>
+
+
+<h5 id="_13">自定义按键绑定</h5>
+<p>只需要按照以下格式在配置文件中写入即可, 比如下面的例子就是按下 <code>mod+e</code> 组合键即可打开 thunar 文件管理器</p>
+<div class="codehilite"><pre><span></span># bindsym &lt;按键组合&gt; exec --no-startup-id &lt;执行的命令或脚本程序&gt;
+bindsym $mod+e exec --no-startup-id thunar
+</pre></div>
+
+
+<h5 id="_14">配置工作区</h5>
+<p>上面的图中可以看到左上角显示的即为工作区, 默认 i3bar 是在下方, 后面会讲如何设置 i3bar 的位置
+首先推荐安装 font-awesome 的图标字体, 可以使得显示更加美观, 如果没安装下面代码显示的可能是方框
+按照下面的格式设置工作区以及工作区显示名称即可</p>
+<div class="codehilite"><pre><span></span><span class="nb">set</span> <span class="nv">$ws1</span> <span class="s2">&quot;1:Home&quot;</span>
+<span class="nb">set</span> <span class="nv">$ws2</span> <span class="s2">&quot;2:Files&quot;</span>
+<span class="nb">set</span> <span class="nv">$ws3</span> <span class="s2">&quot;3:Web&quot;</span>
+<span class="nb">set</span> <span class="nv">$ws4</span> <span class="s2">&quot;4:Code&quot;</span>
+<span class="nb">set</span> <span class="nv">$ws5</span> <span class="s2">&quot;5:Settings&quot;</span>
+<span class="nb">set</span> <span class="nv">$ws6</span> <span class="s2">&quot;6:Misc&quot;</span>
+</pre></div>
+
+
+<h5 id="_15">自动归类</h5>
+<p>上面设定好工作区后, 接下来可以进一步设置, 打开某一程序, 自动将该程序归类到指定工作区
+例如在第一工作区打开了 mousepad, 自动归类到了名为 Code 的工作区, 并以另外的颜色提示</p>
+<p><img alt="assign" src="https://i.loli.net/2018/08/02/5b62beef0dc72.png" /></p>
+<p>要实现该功能只需要按照下文在配置文件中写入</p>
+<div class="codehilite"><pre><span></span><span class="c1"># assign [class=&quot;应用窗口的类名&quot;]               → 工作区</span>
+assign <span class="o">[</span><span class="nv">class</span><span class="o">=</span><span class="s2">&quot;Mousepad&quot;</span><span class="o">]</span>                       → <span class="nv">$ws4</span>
+assign <span class="o">[</span><span class="nv">class</span><span class="o">=</span><span class="s2">&quot;Chromium&quot;</span><span class="o">]</span>                       → <span class="nv">$ws3</span>
+</pre></div>
+
+
+<p>要获取某一应用程序的类名, 只需要在终端中运行 xprop 然后点击目标窗口即可出现信息</p>
+<p><img alt="xprop" src="https://i.loli.net/2018/08/02/5b62bfcf195f8.png" /></p>
+<p>当然还可以根据窗口标题分类, 只需要将 class 改为 title 即可
+还可以实现特定窗口以悬浮模式打开, 可以应用于一些设置窗口等等
+比如下面设定可以设定为默认以悬浮模式打开 lightdm-gtk-greeter 的设置窗口</p>
+<div class="codehilite"><pre><span></span>for_window <span class="o">[</span><span class="nv">class</span><span class="o">=</span><span class="s2">&quot;Lightdm-gtk-greeter-settings&quot;</span><span class="o">]</span>   floating <span class="nb">enable</span>
+for_window <span class="o">[</span><span class="nv">class</span><span class="o">=</span><span class="s2">&quot;Lxappearance&quot;</span><span class="o">]</span>                   floating <span class="nb">enable</span>
+</pre></div>
+
+
+<h5 id="_16">界面样式</h5>
+<p>最后进行一下美化, 自己设置字体和窗口边框颜色</p>
+<div class="codehilite"><pre><span></span><span class="c1"># 设置字体</span>
+font pango:Ubuntu Bold <span class="m">9</span>              
+
+
+<span class="c1"># 项目名                 边框     背景    文字  指示器     子边框</span>
+client.focused          <span class="c1">#5294E2 #5294E2 #FFFFFF #DDDDDD   #5294E2</span>
+client.focused_inactive <span class="c1">#2F343F #2F343F #86888C #292D2E   #5A5A5A</span>
+client.unfocused        <span class="c1">#2F343F #2F343F #86888C #292D2E   #5A5A5A</span>
+client.urgent           <span class="c1">#D64E4E #D64E4E #FFFFFF #D64E4E   #D64E4E</span>
+client.placeholder      <span class="c1">#2F343F #0C0C0C #FFFFFF #2F343F   #262626</span>
+client.background       <span class="c1">#2F343F       </span>
+
+<span class="c1"># 窗口间距 需要安装 i3-gaps 包而不是 i3-wm</span>
+smart_gaps on                         
+gaps inner <span class="m">4</span>                          
+gaps outer <span class="m">2</span>                    
+</pre></div>
+
+
+<p>关于 i3bar 也就是上文图中的面板/状态栏的配置比较复杂, 这里就不怎么讲解, 个人用的是 i3blocks 作为信息输出
+也可以用 conky 之类的, 具体的话搜索可以得到很多详细教程和例子, 这里只是简单说一下
+i3bar 的信息定义在配置文件的 <code>bar {}</code> 区块内</p>
+<div class="codehilite"><pre><span></span>bar <span class="o">{</span>
+    position top <span class="c1"># 位置</span>
+    workspace_buttons yes <span class="c1"># 显示工作区按钮</span>
+    strip_workspace_numbers yes <span class="c1"># 隐藏工作区编号只显示名称</span>
+<span class="o">}</span>
+</pre></div>
+
+
+<h5 id="_17">关机注销</h5>
+<p>写入以下配置, 按下 <code>mod+Pause</code> 组合键后会出现提示, 再按下括号内对应按键即可实现对应操作</p>
+<div class="codehilite"><pre><span></span><span class="nb">set</span> <span class="nv">$Locker</span> i3lock <span class="o">&amp;&amp;</span> sleep <span class="m">1</span>         
+<span class="nb">set</span> <span class="nv">$mode_system</span> :Lock <span class="o">(</span>l<span class="o">)</span> <span class="p">|</span> :Logout <span class="o">(</span>e<span class="o">)</span> <span class="p">|</span> :Reboot <span class="o">(</span>r<span class="o">)</span> <span class="p">|</span> :Shutdown <span class="o">(</span>q<span class="o">)</span>
+mode <span class="s2">&quot;</span><span class="nv">$mode_system</span><span class="s2">&quot;</span> <span class="o">{</span>                 
+    bindsym l <span class="nb">exec</span> --no-startup-id <span class="nv">$Locker</span>, mode <span class="s2">&quot;default&quot;</span>
+    bindsym e <span class="nb">exec</span> --no-startup-id i3-msg exit, mode <span class="s2">&quot;default&quot;</span>
+    bindsym r <span class="nb">exec</span> --no-startup-id systemctl reboot, mode <span class="s2">&quot;default&quot;</span>
+    bindsym q <span class="nb">exec</span> --no-startup-id systemctl poweroff -i, mode <span class="s2">&quot;default&quot;</span>
+
+    <span class="c1"># back to normal: Enter or Escape </span>
+    bindsym Return mode <span class="s2">&quot;default&quot;</span>     
+    bindsym Escape mode <span class="s2">&quot;default&quot;</span>     
+<span class="o">}</span>  
+</pre></div>
+
+
+<p>最后贴出个人的<a href="https://github.com/TunkShif/dotfiles">配置文件</a></p>
+        <a id="url" href="https://tunkshif.github.io/">- INDEX -</a>
+    </div>
+    <div id="footer">
+        <p>Copyright © 2018 TunkShif. Powered by
+            <a href="https://github.com/TunkShif/Arco" target="_blank">Arco</a>.</p>
+    </div>
+</body>
+</html>
