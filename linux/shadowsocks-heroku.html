@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cross The Wall Through Shadowsocks-Heroku</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="/static/css/tango.css" />
+</head>
+<body>
+    <div id=container>
+        <h1 id="cross-the-wall-through-shadowsocks-heroku">Cross The Wall Through Shadowsocks-Heroku</h1>
+<blockquote>
+<p><a href="https://github.com/mrluanma/shadowsocks-heroku">原项目地址</a></p>
+</blockquote>
+<p>首先需要在 heroku 上创建好 app, 然后按照上面的操作执行, 先把项目 clone 到 heroku app 内, 然后上传就行,
+之后执行 <code>npm install</code> 后, 按照以下方式启动</p>
+<div class="codehilite"><pre><span></span>node local.js -s still-tor-8707.herokuapp.com -l 1080 -m rc4 -k &lt;key&gt; -r 80
+</pre></div>
+
+
+<p>由于 chromium 在 linux 下没有 proxy setting, 需要手动通过命令指定代理配置, 按照以下方式启动即可</p>
+<div class="codehilite"><pre><span></span>chromium --proxy-server=&quot;socks5://127.0.0.1:1080&quot;
+</pre></div>
+        <a id="url" href="https://tunkshif.github.io/">- INDEX -</a>
+    </div>
+    <div id="footer">
+        <p>Copyright © 2018 TunkShif. Powered by
+            <a href="https://github.com/TunkShif/Arco" target="_blank">Arco</a>.</p>
+    </div>
+</body>
+</html>
