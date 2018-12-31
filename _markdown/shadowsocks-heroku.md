@@ -3,6 +3,8 @@ TAG: linux
 Cross The Wall Through Shadowsocks-Heroku
 =========================================
 
+现已失效
+
 > [原项目地址](https://github.com/mrluanma/shadowsocks-heroku)
 
 首先需要在 heroku 上创建好 app, 然后按照上面的操作执行, 先把项目 clone 到 heroku app 内, 然后上传就行,
